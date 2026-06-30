@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Выплаты — Личный кабинет</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue: #2970FF;
+    --blue-dark: #14224A;
+    --green: #1FA971;
+    --green-dark: #0F2B20;
+    --text: #14142B;
+    --muted: #8A92A6;
+    --border: #ECEEF1;
+    --bg: #FFFFFF;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--text);
+    background: #FFFFFF;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* decorative top loading bar, as in original */
+  .top-bar {
+    height: 3px;
+    width: 100%;
+    background: linear-gradient(90deg, #ffffff 0%, #1a1a1a 50%, #ffffff 100%);
+  }
+
+  .wrap {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 32px 80px;
+  }
+
+  /* ── HEADER ── */
+  .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .page-title {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+  .btn-blue {
+    background: var(--blue);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 13px 24px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease;
+    white-space: nowrap;
+  }
+  .btn-blue:hover { background: #2160E0; }
+  .btn-blue:active { transform: scale(0.98); }
+
+  /* ── STAT CARDS ── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+  .stat-card {
+    border-radius: 18px;
+    padding: 28px 32px;
+  }
+  .stat-card.available {
+    background: linear-gradient(135deg, #E9F0FF 0%, #F6FAFF 55%, #FFFFFF 100%);
+  }
+  .stat-card.earned {
+    background: linear-gradient(135deg, #E3FAEF 0%, #F4FFF9 55%, #FFFFFF 100%);
+  }
+  .stat-card.paid {
+    background: linear-gradient(135deg, #F4F5F7 0%, #FAFBFC 60%, #FFFFFF 100%);
+    border: 1px solid var(--border);
+  }
+  .stat-label {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+  .stat-card.available .stat-label { color: var(--blue); }
+  .stat-card.earned .stat-label { color: var(--green); }
+  .stat-card.paid .stat-label { color: var(--text); }
+  .stat-value {
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+  .stat-card.available .stat-value { color: var(--blue-dark); }
+  .stat-card.earned .stat-value { color: var(--green-dark); }
+  .stat-card.paid .stat-value { color: var(--text); }
+
+  /* ── REQUEST PAYOUT CARD ── */
+  .panels-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+  .panel {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 32px;
+  }
+  .panel-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .panel-sub {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 24px;
+    line-height: 1.5;
+  }
+  .field-label {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    display: block;
+  }
+  .field-input {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-family: inherit;
+    font-size: 15px;
+    color: var(--text);
+    background: #fff;
+    margin-bottom: 24px;
+    transition: border-color 0.2s ease;
+  }
+  .field-input::placeholder { color: #B7BCC9; }
+  .field-input:focus {
+    outline: none;
+    border-color: var(--blue);
+  }
+  .panel-actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  /* ── HISTORY CARD ── */
+  .history-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    overflow: hidden;
+  }
+  .history-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px 32px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .history-title {
+    font-size: 20px;
+    font-weight: 700;
+  }
+  .tabs {
+    display: flex;
+    background: #F4F5F7;
+    border-radius: 10px;
+    padding: 4px;
+    gap: 2px;
+  }
+  .tab {
+    border: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 9px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: var(--muted);
+    transition: all 0.2s ease;
+  }
+  .tab.active {
+    background: #fff;
+    color: var(--text);
+    box-shadow: 0 1px 3px rgba(16,24,40,0.08);
+  }
+
+  .table-head {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding: 14px 32px;
+    background: #FAFBFC;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .table-head span {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .table-head span:last-child { text-align: right; }
+
+  .table-empty {
+    padding: 64px 32px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 15px;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .stats-grid { grid-template-columns: 1fr; }
+    .panels-grid { grid-template-columns: 1fr; }
+    .table-head { display: none; }
+    .page-title { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar"></div>
+
+<div class="wrap">
+
+  <!-- HEADER: title + new blue button, top right -->
+  <div class="page-header">
+    <h1 class="page-title">Выплаты</h1>
+    <button class="btn-blue" type="button">Оплатить тариф клиента</button>
+  </div>
+
+  <!-- STAT CARDS -->
+  <div class="stats-grid">
+    <div class="stat-card available">
+      <div class="stat-label">Доступно к выводу</div>
+      <div class="stat-value">50&nbsp;000&nbsp;₽</div>
+    </div>
+    <div class="stat-card earned">
+      <div class="stat-label">Всего заработано</div>
+      <div class="stat-value">0&nbsp;₽</div>
+    </div>
+    <div class="stat-card paid">
+      <div class="stat-label">Выплачено</div>
+      <div class="stat-value">0&nbsp;₽</div>
+    </div>
+  </div>
+
+  <!-- REQUEST PAYOUT PANEL (second panel removed as requested) -->
+  <div class="panels-grid">
+    <div class="panel">
+      <div class="panel-title">Запросить выплату</div>
+      <p class="panel-sub">Минимальная сумма и сроки зависят от условий программы</p>
+      <label class="field-label">Сумма</label>
+      <input class="field-input" type="text" inputmode="numeric" placeholder="Введите сумму">
+      <div class="panel-actions">
+        <button class="btn-blue" type="button">Запросить выплату</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HISTORY -->
+  <div class="history-card">
+    <div class="history-head">
+      <div class="history-title">История операций</div>
+      <div class="tabs">
+        <button class="tab active" type="button" data-tab="charges">Начисления</button>
+        <button class="tab" type="button" data-tab="payouts">Выплаты</button>
+      </div>
+    </div>
+    <div class="table-head">
+      <span>Дата</span>
+      <span>Тип</span>
+      <span>Сумма</span>
+    </div>
+    <div class="table-empty">Операций пока нет</div>
+  </div>
+
+</div>
+
+<script>
+  // simple tab toggle, matches original interactive behavior
+  document.querySelectorAll('.tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  // thousand-separator formatting on the amount input
+  document.querySelectorAll('.field-input[inputmode="numeric"]').forEach(input => {
+    input.addEventListener('input', () => {
+      const digits = input.value.replace(/\D/g, '');
+      input.value = digits ? Number(digits).toLocaleString('ru-RU') : '';
+    });
+  });
+</script>
+
+</body>
+</html>
